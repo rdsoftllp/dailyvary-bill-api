@@ -5,13 +5,12 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Bill</title>
+  <title>
+    <%= title %>
+  </title>
   <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet"
-    integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
-    integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <style>
     body {
       font-family: 'Roboto', 'Courier New', Courier, monospace;
@@ -26,9 +25,7 @@
       <div style="display: flex;justify-content: space-between;align-items: center;padding: 8px 0;">
         <div>
           <div style="display: flex; justify-content: start; align-items: center;">
-            <img
-              src="https://firebasestorage.googleapis.com/v0/b/dailyvary-981b1.appspot.com/o/speed.png?alt=media&token=c59ee509-5da8-46a1-8cad-786bf444d055"
-              style="width: 60px; margin-right: 15px;" />
+            <img src="https://firebasestorage.googleapis.com/v0/b/dailyvary-981b1.appspot.com/o/speed.png?alt=media&token=c59ee509-5da8-46a1-8cad-786bf444d055" style="width: 60px; margin-right: 15px;" />
             <h4 style="font-size: 32px;">DailyVary</h4>
           </div>
           <span class="text-secondary">One stop solution for all your delivery needs</span>
@@ -38,28 +35,40 @@
         </div>
       </div>
       <!-- customer info and invoice info -->
-      <div
-        style="border-top: 1px solid #424242; padding: 15px 0;display: flex;justify-content: space-between;align-items: center;">
+      <div style="border-top: 1px solid #424242; padding: 15px 0;display: flex;justify-content: space-between;align-items: center;">
         <div style="display: flex;justify-content: flex-start;align-items: flex-start;flex-direction: column;">
-          <div
-            style="border: 1px solid #212121; padding: 4px;border-radius: 8px;font-size: 18px;display: flex;justify-content: stretch;align-items: stretch;flex-direction: column;min-width: 150px;">
+          <div style="border: 1px solid #212121; padding: 4px;border-radius: 8px;font-size: 18px;display: flex;justify-content: stretch;align-items: stretch;flex-direction: column;min-width: 150px;">
             <div style="border-bottom: 1px solid #BDBDBD;">Bill to</div>
-            <div>Rajesh Dan</div>
-            <div>D322/104</div>
-            <div>9800997986</div>
+            <% if (customerName) { %>
+            <div>
+              <%= customerName %>
+            </div>
+            <% } %>
+            <% if (customerAddress) { %>
+            <div>
+              <%= customerAddress %>
+            </div>
+            <% } %>
+            <% if (customerPhone) { %>
+            <div>
+              <%= customerPhone %>
+            </div>
+            <% } %>
+            <% if (!customerName && !customerAddress && !customerPhone) { %>
+            <div>Customer</div>
+            <% } %>
           </div>
         </div>
         <div>
           <div style="display: flex;justify-content: flex-end;align-items: flex-end;flex-direction: column;">
             <div style="border: 1px solid #212121; padding: 4px;border-radius: 8px;font-size: 20px;">
-              <div
-                style="border-bottom: 1px solid #BDBDBD;display: flex;justify-content: space-between;align-items: center;">
+              <div style="border-bottom: 1px solid #BDBDBD;display: flex;justify-content: space-between;align-items: center;">
                 <span style="margin-right: 4px;">No</span>
-                <span style="font-weight: 600;">#12345678</span>
+                <span style="font-weight: 600;">#<%= billNo %></span>
               </div>
               <div style="display: flex;justify-content: space-between;align-items: center;">
                 <span style="margin-right: 4px;">Date</span>
-                <span style="font-weight: 600;">18/09/2022</span>
+                <span style="font-weight: 600;"><%= billDate  %> </span>
               </div>
             </div>
           </div>
@@ -71,51 +80,29 @@
           <thead class="table-dark">
             <tr>
               <th style="width: 10%;">#</th>
-              <th>Item</th>
-              <th>Quantity</th>
-              <th>Price</th>
+              <th style="width: 40%;">Item</th>
+              <th style="width: 25%;">Quantity</th>
+              <th style="width: 25%; text-align: right;">Price</th>
             </tr>
           </thead>
           <tbody>
+            <% for( let index = 0; index < items.length; index++ ) { %>
             <tr>
-              <td>1</td>
-              <td>Milk</td>
-              <td>1 packet</td>
-              <td>65</td>
+              <td><%= (index + 1) %></td>
+              <td><%= items[index].name %></td>
+              <td><%= items[index].quantity %></td>
+              <td style="text-align: right;"><%= items[index].price %></td>
             </tr>
-            <tr>
-              <td>2</td>
-              <td>Ciggerate</td>
-              <td>10 packet</td>
-              <td>500</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Alu</td>
-              <td>2kg</td>
-              <td>120</td>
-            </tr>
-            <tr>
-              <td>4</td>
-              <td>Drinks</td>
-              <td>6</td>
-              <td>1200</td>
-            </tr>
-            <tr>
-              <td>5</td>
-              <td>Biscuits</td>
-              <td>2 packet</td>
-              <td>60</td>
-            </tr>
+            <% } %>
             <tr class="table-primary">
               <td colspan="2">&nbsp;</td>
               <td style="font-weight: 600;">Service Charge</td>
-              <td>33</td>
+              <td style="text-align: right;"><%= serviceCharge %></td>
             </tr>
             <tr class="table-dark">
               <td colspan="2">&nbsp;</td>
               <td style="font-weight: 600;">Total</td>
-              <td>1978</td>
+              <td style="text-align: right;"><%= total %></td>
             </tr>
           </tbody>
         </table>

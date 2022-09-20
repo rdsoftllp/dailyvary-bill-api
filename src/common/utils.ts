@@ -10,3 +10,12 @@ export const FirebaseDateTransforrmer = (data: any) => {
   }
   return new Date(data);
 }
+
+export const formatCurencyNumber = (data: number) => {
+  const formatter = Intl.NumberFormat('en-US');
+  const formattedNum = formatter.format(parseFloat(data.toFixed(2)));
+  if (formattedNum.includes('.')) {
+    return formattedNum;
+  }
+  return `${formattedNum}.00`;
+}

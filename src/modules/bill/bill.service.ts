@@ -15,6 +15,7 @@ import { UpdateBillDto } from './dto/update-bill.dto';
 import { BillEntity } from './entities/bill.entity';
 import { BillListEntity } from './entities/bill.list.entity';
 import { ConfigService } from '@nestjs/config';
+import { FirebaseDateTransforrmer, formatCurencyNumber } from 'src/common/utils';
 
 @Injectable()
 export class BillService {
@@ -158,7 +159,23 @@ export class BillService {
         // delete existing pdf
         await this.firebase.storage.bucket(this.configService.get<string>(EnvConfig.FIREBASE_STORAGE_BUCKET)).file(fetchedBill.data()[CollectionFields.Bill.originalFileName]).delete();
       }
-      const renderedHtml = await ejs.renderFile(path.resolve(__dirname, '../../../views/bill-pdf.ejs'));
+      const fetchedBillData = fetchedBill.data();
+      const renderedHtml = await ejs.renderFile(path.resolve(__dirname, '../../../views/bill-pdf.ejs'), {
+        title: `Bill - ${fetchedBillData[CollectionFields.Bill.billNo]}`,
+        customerName: fetchedBillData[CollectionFields.Bill.customerName],
+        customerAddress: fetchedBillData[CollectionFields.Bill.customerAddress],
+        customerPhone: fetchedBillData[CollectionFields.Bill.customerPhone],
+        billNo: fetchedBillData[CollectionFields.Bill.billNo],
+        billDate: format(FirebaseDateTransforrmer(fetchedBillData[CollectionFields.Bill.date]), 'dd/MM/yyyy'),
+        items: fetchedBillData[CollectionFields.Bill.items].map(item => {
+          return {
+            ...item,
+            [CollectionFields.BillItems.price]: formatCurencyNumber(item[CollectionFields.BillItems.price]),
+          }
+        }),
+        serviceCharge: formatCurencyNumber(fetchedBillData[CollectionFields.Bill.serviceCharge]),
+        total: formatCurencyNumber(fetchedBillData[CollectionFields.Bill.total]),
+      });
       const browser = await puppeteer.launch();
       const page = await browser.newPage();
       await page.setContent(renderedHtml, {
