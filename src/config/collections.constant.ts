@@ -22,7 +22,12 @@ export const CollectionFields = {
     total: 'total',
     discount: 'discount',
     discountText: 'discountText',
-    items: 'items'
+    items: 'items',
+    billNo: 'billNo',
+    pdfUrl: 'pdfUrl',
+    pdfCreatedAt: 'pdfCreatedAt',
+    pdfExpiresAt: 'pdfExpiresAt',
+    originalFileName: 'originalFileName'
   },
   BillItems: {
     name: 'name',

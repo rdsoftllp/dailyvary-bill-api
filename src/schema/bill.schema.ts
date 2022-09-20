@@ -6,6 +6,7 @@ export type BillItem = {
 
 export type Bill = {
   id: string;
+  billNo: string;
   customerName?: string;
   customerAddress?: string;
   customerPhone?: string;
@@ -19,4 +20,8 @@ export type Bill = {
   discount?: number;
   discountText?: string;
   items: BillItem[];
+  pdfUrl?: string;
+  pdfCreatedAt?: string;
+  pdfExpiresAt?: string;
+  originalFileName?: string;
 }

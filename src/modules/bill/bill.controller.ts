@@ -2,6 +2,7 @@ import { Body, Controller, Get, Post } from '@nestjs/common';
 import { UserData } from 'src/decorators/user.decorator';
 import { UserEntity } from '../user/entities/user.entity';
 import { BillService } from './bill.service';
+import { CreateBillPdfDto } from './dto/create-bill-pdf.dto';
 import { CreateBillDto } from './dto/create-bill.dto';
 import { DeleteBillDto } from './dto/delete-bill.dto';
 import { FetchBillsDto } from './dto/fetch-bill.dto';
@@ -29,5 +30,10 @@ export class BillController {
   @Post('fetch')
   async fetchBills(@UserData() user: UserEntity, @Body() filter: FetchBillsDto) {
     return this.billService.fetchBills(user, filter);
+  }
+
+  @Post('generate-pdf')
+  async createBillPdf(@UserData() user: UserEntity, @Body() data: CreateBillPdfDto) {
+    return this.billService.createBillPdf(user, data);
   }
 }
